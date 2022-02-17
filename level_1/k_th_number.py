@@ -1,3 +1,8 @@
+'''
+프로그래머스 문제 문자열과 영단어 
+https://programmers.co.kr/learn/courses/30/lessons/42748
+
+'''
 def solution(array, commands):
     answer = []
     def cutarray(arr, a,b,c):
