@@ -30,7 +30,7 @@ visited = [[False]*n for _ in range(n)]
 dx = [-1,1,0,0]
 dy = [0,0,-1,1]
 # dfs 함수 짜기
-def dfs(x,y):
+def dfs1(x,y):
   if x<=-1 or x>=n or y <=-1 or y>=n:
     return False
   visited[x][y] = 1
@@ -40,6 +40,19 @@ def dfs(x,y):
   dfs(x,y+1)
   return True
   return False
+def dfs(x, y):
+    # 집 개수 증가 & 방문체크
+    global cnt
+    cnt += 1
+    visited[x][y] = True
+
+    # 인접한 노드 탐색하면서 연결되어 있으면 dfs 재귀호출
+    for k in range(4):
+        nx, ny = x + dx[k], y + dy[k]
+
+        if 0 <= nx < n and 0 <= ny < n:
+            if map[nx][ny] == 1 and visited[nx][ny] == False:
+                dfs(nx, ny)
 
 cnt =0 
 for i in range(n):
