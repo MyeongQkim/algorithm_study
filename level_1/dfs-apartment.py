@@ -19,13 +19,16 @@ for 문돌다가 방문하지 않은 좌표를 만나면 새로운 그래프 탐
 
 
 '''
-
+from collections import deque
 # 입력 부분 짜기, 2차원 배열 입력하는 방법 까먹지 말자. 
 n = int(input())
 map = [list(map(int,input().split())) for _ in range(n)]
 
 # visited 만들기 false가 n개인 n개의 2차원 배열 
 visited = [[False]*n for _ in range(n)]
+
+print(map)
+print(visited)
 # 방향 전후 좌우
 dx = [-1,1,0,0]
 dy = [0,0,-1,1]
@@ -40,25 +43,49 @@ def dfs1(x,y):
   dfs(x,y+1)
   return True
   return False
+
 def dfs(x, y):
     # 집 개수 증가 & 방문체크
     global cnt
     cnt += 1
     visited[x][y] = True
-
+    print(x,y)
     # 인접한 노드 탐색하면서 연결되어 있으면 dfs 재귀호출
     for k in range(4):
-        nx, ny = x + dx[k], y + dy[k]
+        nx = x + dx[k]
+        ny = y + dy[k]
 
         if 0 <= nx < n and 0 <= ny < n:
             if map[nx][ny] == 1 and visited[nx][ny] == False:
                 dfs(nx, ny)
 
-cnt =0 
+
+def bfs(x, y, cnt):
+    q = deque()
+    q.append((x, y))
+    visited[x][y] = cnt
+    while q:
+        x, y = q.popleft()
+        
+        # 위 아래 왼쪽 오른쪽 탐색
+        for k in range(4):
+            nx, ny = x+dx[k], y+dy[k]
+            # 지도 밖으로 안 나갔는지 확인
+            if 0<=nx<n and 0<=ny<n :
+                # 집이 있고, 아직 방문한 곳이 아니라면 꼬우
+                if map[nx][ny] == 1 and group[nx][ny] == 0:
+                    q.append((nx, ny))
+                    group[nx][ny] = cnt
+
+cnt=0
+ans = []
 for i in range(n):
   for j in range(n):
-    if dfs(i,j)==True:
-      cnt +=1
-print(visited)
-print(cnt)
-  
+    if map[i][j] == 1 and visited[i][j] == False:
+      cnt = 0
+      dfs(i, j)
+      ans.append(cnt)
+
+print(len(ans))
+ans.sort()
+print('\n'.join(map(str, ans)))
